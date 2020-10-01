@@ -9,14 +9,16 @@ package logic;
  *
  * @author Michelle Alvarado
  */
-public class Register {
-    private String registerName;
+public class Number {
+    private String numberValue;
     private int bitsLength;
     private String binaryCode;
+    private Boolean isNegative;
     
-    public Register(String register, int bits, String binaryC){
-        this.registerName = register;
+    public Number(String number, int bits, String binaryC, Boolean negative){
+        this.numberValue = number;
         this.bitsLength = bits;
         this.binaryCode = binaryC;
+        this.isNegative = negative;
     }
 }

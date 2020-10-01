@@ -9,23 +9,23 @@ package logic;
  *
  * @author Michelle Alvarado
  */
-public class Operation {
-    private String operationName;
+public class GeneralRegister {
+    private String registerName;
     private int bitsLength;
     private String binaryCode;
     
-    public Operation(String operation, int bits, String code){
-        this.operationName = operation;
+    public GeneralRegister(String register, int bits, String binaryC){
+        this.registerName = register;
         this.bitsLength = bits;
-        this.binaryCode = code;
+        this.binaryCode = binaryC;
     }
 
-    public String getOperationName() {
-        return operationName;
+    public String getRegisterName() {
+        return registerName;
     }
 
-    public void setOperationName(String operationName) {
-        this.operationName = operationName;
+    public void setRegisterName(String registerName) {
+        this.registerName = registerName;
     }
 
     public int getBitsLength() {

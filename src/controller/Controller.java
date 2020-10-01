@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import logic.CPU;
 import logic.ProgramValidator;
 
 /**
@@ -38,6 +39,8 @@ public class Controller implements ActionListener {
                         Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -111,6 +114,7 @@ public class Controller implements ActionListener {
         programValidator = new ProgramValidator();
         Boolean correctFormat;
         correctFormat = programValidator.validateSelectedFile(this.extractFileInfo(selectedFile));
+        System.out.println(correctFormat);
     }
     
 }
