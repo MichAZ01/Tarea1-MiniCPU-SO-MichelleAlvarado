@@ -1,0 +1,116 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package controller;
+
+import GUI.MiniPC;
+import GUI.MyCustomFilter;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import logic.ProgramValidator;
+
+/**
+ *
+ * @author Michelle Alvarado
+ */
+public class Controller implements ActionListener {
+    private MiniPC view;
+    
+    public Controller(){
+    }
+    
+    @Override
+    public void actionPerformed(ActionEvent ae) {
+        switch(ae.getActionCommand()){
+            case "openFile":
+                {
+                    try {
+                        OpenFolderButtonActionPerformed(this.view);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                break;
+        }
+    }
+    
+    public void showView(){
+         /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Windows".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(MiniPC.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(MiniPC.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(MiniPC.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MiniPC.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        this.view = new MiniPC();
+        MiniPC viewP = this.view;
+        this.view.OpenFolderButton.addActionListener(this);
+        
+        
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                viewP.setVisible(true);
+            }
+        });
+    }
+    
+    public void OpenFolderButtonActionPerformed(javax.swing.JFrame view) throws IOException {                                                 
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        MyCustomFilter assemblerFilter = (MyCustomFilter) new MyCustomFilter(".asm", "Archivo de código Ensamblador");
+        fileChooser.addChoosableFileFilter(assemblerFilter);
+        int result = fileChooser.showOpenDialog(view);
+        File selectedFile = null;
+        switch (result) {
+            case JFileChooser.APPROVE_OPTION:
+                selectedFile = fileChooser.getSelectedFile();
+                this.verifyFileFormat(selectedFile);
+                break;
+            case JFileChooser.CANCEL_OPTION:
+                break;
+            default:
+                break;
+        }
+    }   
+    
+    public String extractFileInfo(File file) throws IOException {
+        FileInputStream tokensFile = new FileInputStream(file);
+        byte[] dataBytes = new byte[(int) file.length()];
+        tokensFile.read(dataBytes);
+        String data = new String(dataBytes, "UTF-8");
+        return data;
+    }
+    
+    public void verifyFileFormat(File selectedFile) throws IOException{
+        ProgramValidator programValidator;
+        programValidator = new ProgramValidator();
+        Boolean correctFormat;
+        correctFormat = programValidator.validateSelectedFile(this.extractFileInfo(selectedFile));
+    }
+    
+}
