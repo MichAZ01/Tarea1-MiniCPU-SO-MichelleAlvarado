@@ -12,6 +12,7 @@ package logic;
 public class Program {
     String[] programInstructions;
     String[] binaryInstructions;
+    int programSize;
     
     public Program(){
     }
@@ -31,6 +32,16 @@ public class Program {
     public void setBinaryInstructions(String[] binaryInstructions) {
         this.binaryInstructions = binaryInstructions;
     }
+
+    public int getProgramSize() {
+        return programSize;
+    }
+
+    public void setProgramSize(int programSize) {
+        this.programSize = programSize;
+    }
+    
+    
     
     
 }

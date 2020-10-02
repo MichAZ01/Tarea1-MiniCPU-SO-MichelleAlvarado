@@ -18,6 +18,7 @@ public class ProgramLoader {
         this.program = new Program();
         this.LoadProgramInstructions(data);
         this.LoadBinaryInstructions();
+        this.program.setProgramSize(this.program.getProgramInstructions().length);
     }
 
     

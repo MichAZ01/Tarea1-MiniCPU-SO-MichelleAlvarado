@@ -123,6 +123,7 @@ public class Controller implements ActionListener {
         correctFormat = programValidator.validateSelectedFile(this.extractFileInfo(selectedFile));
         if(correctFormat){
             this.createProgramStructure(selectedFile);
+            this.setTableModel(this.InitializeCodeTableModel(4, 16));
         }
         else{
             ImageIcon icon = new ImageIcon("GUI/Images/error.png");
@@ -133,10 +134,45 @@ public class Controller implements ActionListener {
     public void createProgramStructure(File selectedFile) throws IOException{
         ProgramLoader programLoader = new ProgramLoader(this.extractFileInfo(selectedFile));
         this.currentProgram = programLoader.getProgram();
-        int size = this.currentProgram.getProgramInstructions().length;
-        for(int i = 0; i < size; i++){
-            System.out.println(this.currentProgram.getProgramInstructions()[i] + " " + this.currentProgram.getBinaryInstructions()[i]);
+    }
+    
+    public Object[][] InitializeCodeTableModel(int columnLength, int rowsTotalSize){
+        int programSize = this.currentProgram.getProgramSize();
+        int rows = this.currentProgram.getProgramSize();
+        int columns = columnLength;
+        int rowsTotal = 0;
+        if(rows < rowsTotalSize) rows = rows + (rowsTotalSize - rows);
+        Object[][] data = new Object[rows][columns];
+        
+        for(int i = 0; i < rows; i++){
+            data[i][0] = null;
+            if(i < programSize){
+                data[i][1] = this.currentProgram.getProgramInstructions()[i];
+                data[i][2] = this.currentProgram.getBinaryInstructions()[i];
+            }
+            else{
+                data[i][1] = null;
+                data[i][2] = null;
+            }
         }
+        return data;
+    }
+    
+    public void setTableModel(Object[][] data){
+        view.codeTable.setModel(new javax.swing.table.DefaultTableModel(
+            data,
+            new String [] {
+                "Posición memoria", "Código ASM", "Código Binario"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
     }
     
 }

@@ -231,7 +231,7 @@ public class MiniPC extends javax.swing.JFrame {
 
         registerTabbedPane.addTab("Registros", registerContainer);
 
-        codeTable.setFont(new java.awt.Font("Bahnschrift", 0, 13)); // NOI18N
+        codeTable.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         codeTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
