@@ -18,7 +18,10 @@ public class Memory {
     }
     
     private void initializeMemorySpaces(){
-        this.memoryArray = new MemorySpace[100];
+        this.memoryArray = new MemorySpace[memoryLength];
+        for(int i = 0; i < memoryLength; i++){
+            this.memoryArray[i] = new MemorySpace(i);
+        }
     }
     
     public void saveGeneralRegisters(){

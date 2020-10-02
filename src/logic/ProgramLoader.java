@@ -12,7 +12,7 @@ import java.io.IOException;
  * @author Michelle Alvarado
  */
 public class ProgramLoader {
-    Program program;
+    private Program program;
     
     public ProgramLoader(){
         this.program = new Program();
@@ -26,11 +26,11 @@ public class ProgramLoader {
                 case "MOV":
                     String lineWithoutOperation = line.substring(4);
                     String[] lineParts = lineWithoutOperation.split(", ");
-                    binaryInstruction = ConstructBinaryMOVInstruction(operation, lineParts[0], lineParts[1]);
+                    binaryInstruction = ConstructBinaryInstruction(operation, lineParts[0], Integer.parseInt(lineParts[1]));
                     break;
                 default:
                     String register = line.substring((operation.length() + 1));
-                    binaryInstruction = ConstructBinaryInstruction(operation, register);
+                    binaryInstruction = ConstructBinaryInstruction(operation, register, 0);
                     break;
             }
         
@@ -47,20 +47,18 @@ public class ProgramLoader {
         int size = instructions.length;
         String[] binaryInstructions = new String[size];
         for(int i = 0; i < size; i++){
-            String line = this.createBinaryInstruction(instructions[i]);
-            binaryInstructions[i] = line;
+            String binaryInstruction = this.createBinaryInstruction(instructions[i]);
+            binaryInstructions[i] = binaryInstruction;
         }
         this.program.setBinaryInstructions(binaryInstructions);
     }
+
     
-    public String ConstructBinaryMOVInstruction(String operation, String register, String number){
-        String binaryInstruction = "";
-        
-        return binaryInstruction;
-    }
-    
-    public String ConstructBinaryInstruction(String operation, String register){
-        String binaryInstruction = "";
+    public String ConstructBinaryInstruction(String operation, String register, int number) throws IOException{
+        String binaryOperation = CPU.getCPU().getAnOperationBinary(operation);
+        String binaryRegister = CPU.getCPU().getAnGeneralRegisterBinary(register);
+        String binaryNumber = new BinaryConversor().decimalToBinary(number);
+        String binaryInstruction = binaryOperation + " " + binaryRegister + " " + binaryNumber;
         
         return binaryInstruction;
     }

@@ -122,5 +122,26 @@ public class CPU {
         return registerNames;
     }
     
+    public String getAnOperationBinary(String operation){
+        String binaryCode = "";
+        for(int i = 0; i < this.CPUOperations.length; i++){
+            if(operation.equals(this.CPUOperations[i].getOperationName())){
+                binaryCode = this.CPUOperations[i].getBinaryCode();
+                break;
+            }
+        }
+        return binaryCode;
+    }
+    
+    public String getAnGeneralRegisterBinary(String register){
+        String binaryCode = "";
+        for(int i = 0; i < this.generalRegisters.length; i++){
+            if(register.equals(this.generalRegisters[i].getRegisterName())){
+                binaryCode = this.generalRegisters[i].getBinaryCode();
+                break;
+            }
+        }
+        return binaryCode;
+    }
     
 }
