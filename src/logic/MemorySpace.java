@@ -11,11 +11,11 @@ package logic;
  */
 public class MemorySpace {
     private int memorySpaceIndex;
-    private String actualValue;
+    private String currentValue;
             
     public MemorySpace(int index){
         this.memorySpaceIndex = index;
-        this.actualValue = "0";
+        this.currentValue = "0";
     }
 
     public int getMemorySpaceIndex() {
@@ -26,12 +26,12 @@ public class MemorySpace {
         this.memorySpaceIndex = memorySpaceIndex;
     }
 
-    public String getActualValue() {
-        return actualValue;
+    public String getCurrentValue() {
+        return currentValue;
     }
 
-    public void setActualValue(String actualValue) {
-        this.actualValue = actualValue;
+    public void setCurrentValue(String actualValue) {
+        this.currentValue = actualValue;
     }
     
     

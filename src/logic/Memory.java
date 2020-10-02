@@ -24,4 +24,20 @@ public class Memory {
     public void saveGeneralRegisters(){
         
     }
+
+    public static int getMemoryLength() {
+        return memoryLength;
+    }
+
+    public static void setMemoryLength(int memoryLength) {
+        Memory.memoryLength = memoryLength;
+    }
+
+    public MemorySpace[] getMemoryArray() {
+        return memoryArray;
+    }
+
+    public void setMemoryArray(MemorySpace[] memoryArray) {
+        this.memoryArray = memoryArray;
+    }
 }

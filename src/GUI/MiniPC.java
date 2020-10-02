@@ -72,7 +72,9 @@ public class MiniPC extends javax.swing.JFrame {
 
         container.setBackground(new java.awt.Color(204, 204, 235));
 
+        OpenFolderButton.setFont(new java.awt.Font("Bahnschrift", 1, 13)); // NOI18N
         OpenFolderButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GUI/Images/folder-open-flat.png"))); // NOI18N
+        OpenFolderButton.setText("Abrir archivo");
         OpenFolderButton.setActionCommand("openFile");
         OpenFolderButton.setBorder(null);
         OpenFolderButton.setBorderPainted(false);
@@ -86,7 +88,7 @@ public class MiniPC extends javax.swing.JFrame {
         headerContainerLayout.setHorizontalGroup(
             headerContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(headerContainerLayout.createSequentialGroup()
-                .addComponent(OpenFolderButton, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(OpenFolderButton, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         headerContainerLayout.setVerticalGroup(

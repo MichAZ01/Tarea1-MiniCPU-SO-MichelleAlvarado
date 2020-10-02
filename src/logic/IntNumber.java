@@ -9,13 +9,13 @@ package logic;
  *
  * @author Michelle Alvarado
  */
-public class Number {
+public class IntNumber {
     private String numberValue;
     private int bitsLength;
     private String binaryCode;
     private Boolean isNegative;
     
-    public Number(String number, int bits, String binaryC, Boolean negative){
+    public IntNumber(String number, int bits, String binaryC, Boolean negative){
         this.numberValue = number;
         this.bitsLength = bits;
         this.binaryCode = binaryC;

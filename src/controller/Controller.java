@@ -14,8 +14,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import logic.BinaryConversor;
 import logic.CPU;
+import logic.Program;
 import logic.ProgramValidator;
 
 /**
@@ -24,6 +29,7 @@ import logic.ProgramValidator;
  */
 public class Controller implements ActionListener {
     private MiniPC view;
+    private Program currentProgram;
     
     public Controller(){
     }
@@ -114,7 +120,17 @@ public class Controller implements ActionListener {
         programValidator = new ProgramValidator();
         Boolean correctFormat;
         correctFormat = programValidator.validateSelectedFile(this.extractFileInfo(selectedFile));
-        System.out.println(correctFormat);
+        if(correctFormat){
+            this.createProgramStructure(selectedFile);
+        }
+        else{
+            ImageIcon icon = new ImageIcon("GUI/Images/error.png");
+            JOptionPane.showMessageDialog(this.view,"El programa no tiene el formato de instrucciones correctas","Error al leer archivo",JOptionPane.PLAIN_MESSAGE,icon);
+        }
+    }
+    
+    public void createProgramStructure(File selectedFile){
+        
     }
     
 }

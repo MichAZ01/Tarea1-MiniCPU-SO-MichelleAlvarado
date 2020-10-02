@@ -102,7 +102,7 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="OpenFolderButton" min="-2" pref="62" max="-2" attributes="0"/>
+                      <Component id="OpenFolderButton" min="-2" pref="151" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -116,9 +116,13 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="OpenFolderButton">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Bahnschrift" size="13" style="1"/>
+                </Property>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/GUI/Images/folder-open-flat.png"/>
                 </Property>
+                <Property name="text" type="java.lang.String" value="Abrir archivo"/>
                 <Property name="actionCommand" type="java.lang.String" value="openFile"/>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="null"/>

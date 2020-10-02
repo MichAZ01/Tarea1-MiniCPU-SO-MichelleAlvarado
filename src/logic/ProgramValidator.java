@@ -31,9 +31,13 @@ public class ProgramValidator {
                     } else correctFormat = false;
                     break;
                 default:
-                    String lineWithoutOperation = line.substring((operation.length() + 1));
-                    if(this.StringExistsInArray(lineWithoutOperation, allowedRegisters)) correctFormat = true;
+                    if(line.length() >= (operation.length() + 1)){
+                        String lineWithoutOperation = line.substring((operation.length() + 1));
+                        if(this.StringExistsInArray(lineWithoutOperation, allowedRegisters)) correctFormat = true;
+                        else correctFormat = false;
+                    }
                     else correctFormat = false;
+                    
                     break;
             }
         }
@@ -83,7 +87,14 @@ public class ProgramValidator {
         String[] lineParts = line.split(", ");
         int size = lineParts.length;
         if(size == 2){
-            if(!this.StringExistsInArray(lineParts[0], allowedRegisters) || !isNumeric(lineParts[1])) correctFormat = false;
+            if(!this.StringExistsInArray(lineParts[0], allowedRegisters) || !isNumeric(lineParts[1])){ 
+                correctFormat = false;
+            }
+            else{
+                if(isNumeric(lineParts[1]) && Integer.parseInt(lineParts[1]) > 127){
+                    correctFormat = false;
+                }
+            }
         }
         return correctFormat;
     }
