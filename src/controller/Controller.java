@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import logic.BinaryConversor;
 import logic.CPU;
 import logic.Program;
+import logic.ProgramConversor;
 import logic.ProgramLoader;
 import logic.ProgramValidator;
 
@@ -31,7 +32,9 @@ import logic.ProgramValidator;
 public class Controller implements ActionListener {
     private MiniPC view;
     private Program currentProgram;
-    
+    private int currentProgramInitIndex;
+    private int linesExecuted;
+    private int currentProgramCurrentIndex;
     public Controller(){
     }
     
@@ -41,12 +44,32 @@ public class Controller implements ActionListener {
             case "openFile":
                 {
                     try {
+                        this.CleanCodeTableModel(4, 16);
+                        this.view.startButton.setEnabled(false);
+                        this.view.nextButton.setEnabled(false);
                         OpenFolderButtonActionPerformed(this.view);
                     } catch (IOException ex) {
                         Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
                 break;
+            case "start":
+                {
+                    try {
+                        this.startProgramExecution();
+                    } catch (IOException ex) {
+                        Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                break;
+            case "next":
+        {
+            try {
+                this.nextInstruction();
+            } catch (IOException ex) {
+                Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
             default:
                 break;
         }
@@ -79,7 +102,8 @@ public class Controller implements ActionListener {
         this.view = new MiniPC();
         MiniPC viewP = this.view;
         this.view.OpenFolderButton.addActionListener(this);
-        
+        this.view.startButton.addActionListener(this);
+        this.view.nextButton.addActionListener(this);
         
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -124,6 +148,8 @@ public class Controller implements ActionListener {
         if(correctFormat){
             this.createProgramStructure(selectedFile);
             this.setTableModel(this.InitializeCodeTableModel(4, 16));
+            this.view.startButton.setActionCommand("start");
+            this.view.startButton.setEnabled(true);
         }
         else{
             ImageIcon icon = new ImageIcon("GUI/Images/error.png");
@@ -140,7 +166,6 @@ public class Controller implements ActionListener {
         int programSize = this.currentProgram.getProgramSize();
         int rows = this.currentProgram.getProgramSize();
         int columns = columnLength;
-        int rowsTotal = 0;
         if(rows < rowsTotalSize) rows = rows + (rowsTotalSize - rows);
         Object[][] data = new Object[rows][columns];
         
@@ -159,7 +184,7 @@ public class Controller implements ActionListener {
     }
     
     public void setTableModel(Object[][] data){
-        view.codeTable.setModel(new javax.swing.table.DefaultTableModel(
+        this.view.codeTable.setModel(new javax.swing.table.DefaultTableModel(
             data,
             new String [] {
                 "Posición memoria", "Código ASM", "Código Binario"
@@ -175,4 +200,76 @@ public class Controller implements ActionListener {
         });
     }
     
+    public void CleanCodeTableModel(int columns, int rows){
+        Object[][] data = new Object[rows][columns];
+        
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < columns; j++){
+                data[i][j] = null;
+            }
+        }
+        setTableModel(data);
+    }
+    
+    public Object[][] InitializeCodeTableModelWithMemoryPositions(int columnLength, int rowsTotalSize, int index){
+        int programSize = this.currentProgram.getProgramSize();
+        int rows = this.currentProgram.getProgramSize();
+        int columns = columnLength;
+        if(rows < rowsTotalSize) rows = rows + (rowsTotalSize - rows);
+        Object[][] data = new Object[rows][columns];
+        
+        for(int i = 0; i < rows; i++){
+            if(i < programSize){
+                data[i][0] = index;
+                data[i][1] = this.currentProgram.getProgramInstructions()[i];
+                data[i][2] = this.currentProgram.getBinaryInstructions()[i];
+                index += 1;
+            }
+            else{
+                data[i][0] = null;
+                data[i][1] = null;
+                data[i][2] = null;
+            }
+        }
+        return data;
+    }
+    
+    public void startProgramExecution() throws IOException{
+        CPU.getCPU().cleanMemorySpaces();
+        CPU.getCPU().cleanCPURegisters();
+        this.currentProgramInitIndex = CPU.getCPU().loadProgramIntoMemory(this.currentProgram.getBinaryInstructions());
+        this.setTableModel(this.InitializeCodeTableModelWithMemoryPositions(4, 16, currentProgramInitIndex));
+        this.linesExecuted = 0;
+        this.currentProgramCurrentIndex = this.currentProgramInitIndex;
+        view.startButton.setEnabled(false);
+        this.executeProgramInstruction();
+        view.nextButton.setEnabled(true);
+    }
+    
+    public void executeProgramInstruction() throws IOException{
+        System.out.println("-------------------------------------------------------");
+        System.out.println(this.currentProgramCurrentIndex);
+        System.out.println(this.linesExecuted);
+        System.out.println(CPU.getCPU().getMemory().getMemoryArray()[this.currentProgramCurrentIndex].getCurrentValue());
+        System.out.println(new ProgramConversor().binaryToASMInstruction(CPU.getCPU().getMemory().getMemoryArray()[this.currentProgramCurrentIndex].getCurrentValue()));
+        System.out.println("-------------------------------------------------------");
+        //primero llamo a ejecutar la instrucción
+        //luego actualizo los registros en pantalla
+        //después:
+        this.currentProgramCurrentIndex = this.currentProgramCurrentIndex + 1;
+        this.linesExecuted = this.linesExecuted + 1;
+    }
+    
+    public void nextInstruction() throws IOException{
+        System.out.println("entra");
+        if(this.linesExecuted < this.currentProgram.getProgramSize()){
+            this.executeProgramInstruction();
+        }
+        if(this.linesExecuted == this.currentProgram.getProgramSize()){
+            CPU.getCPU().cleanMemorySpaces();
+            CPU.getCPU().cleanCPURegisters();
+            view.startButton.setEnabled(true);
+            view.nextButton.setEnabled(false);
+        }
+    }
 }

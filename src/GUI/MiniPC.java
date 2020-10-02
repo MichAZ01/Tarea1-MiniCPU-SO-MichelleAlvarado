@@ -291,6 +291,7 @@ public class MiniPC extends javax.swing.JFrame {
         startButton.setBorderPainted(false);
         startButton.setContentAreaFilled(false);
         startButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        startButton.setEnabled(false);
         startButton.setFocusPainted(false);
         startButton.setFocusable(false);
 

@@ -14,18 +14,6 @@ public class Memory {
     private MemorySpace[] memoryArray;
     
     public Memory(){
-        this.initializeMemorySpaces();
-    }
-    
-    private void initializeMemorySpaces(){
-        this.memoryArray = new MemorySpace[memoryLength];
-        for(int i = 0; i < memoryLength; i++){
-            this.memoryArray[i] = new MemorySpace(i);
-        }
-    }
-    
-    public void saveGeneralRegisters(){
-        
     }
 
     public static int getMemoryLength() {

@@ -11,11 +11,13 @@ package logic;
  */
 public class CPURegister {
     private String registerName;
-    private String actualValue;
+    private String initValue;
+    private String currentValue;
     
-    public CPURegister(String register){
+    public CPURegister(String register, String value){
         this.registerName = register;
-        this.actualValue = "-";
+        this.initValue = value;
+        this.currentValue = value;
     }
 
     public String getRegisterName() {
@@ -26,11 +28,20 @@ public class CPURegister {
         this.registerName = registerName;
     }
 
-    public String getActualValue() {
-        return actualValue;
+    public String getCurrentValue() {
+        return currentValue;
     }
 
-    public void setActualValue(String actualValue) {
-        this.actualValue = actualValue;
+    public void setCurrentValue(String currentValue) {
+        this.currentValue = currentValue;
     }
+
+    public String getInitValue() {
+        return initValue;
+    }
+
+    public void setInitValue(String initValue) {
+        this.initValue = initValue;
+    }
+    
 }

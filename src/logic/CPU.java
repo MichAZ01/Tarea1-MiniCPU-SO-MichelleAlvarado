@@ -20,6 +20,7 @@ public class CPU {
     
     private CPU() throws IOException{
         this.memory = new Memory();
+        this.initializeMemorySpaces();
         this.initializeCPUOperations();
         this.initializeCPURegisters();
         this.initializeGeneralRegisters();
@@ -50,10 +51,12 @@ public class CPU {
         String[] CPURegistersLines = new ConfigReader().readFile(System.getProperty("user.dir") + "\\src\\logic\\ConfigFiles\\CPURegisters.txt");
         int size = CPURegistersLines.length;
         String line = "";
+        String[] registersConfig = new String[2];
         this.CPURegisters = new CPURegister[size];
         for(int i = 0; i < size; i++){
             line = CPURegistersLines[i];
-            CPURegister register = new CPURegister(line);
+            registersConfig = line.split(" ");
+            CPURegister register = new CPURegister(registersConfig[0], registersConfig[1]);
             this.CPURegisters[i] = register;
         }
     }
@@ -142,6 +145,107 @@ public class CPU {
             }
         }
         return binaryCode;
+    }
+    
+    public Operation getOperationByName(String opName){
+        Operation op = null;
+        for(int i = 0; i < this.CPUOperations.length; i++){
+            op = this.CPUOperations[i];
+            if(opName.equals(op.getOperationName())) break;
+        }
+        return op;
+    }
+    
+    public GeneralRegister getGeneralRegisterByName(String registerName){
+        GeneralRegister register = null;
+        for(int i = 0; i < this.generalRegisters.length; i++){
+            register = this.generalRegisters[i];
+            if(registerName.equals(register.getRegisterName())) break;
+        }
+        return register;
+    }
+    
+    public CPURegister getCPURegisterByName(String registerName){
+        CPURegister register = null;
+        for(int i = 0; i < this.CPURegisters.length; i++){
+            register = this.CPURegisters[i];
+            if(registerName.equals(register.getRegisterName())) break;
+        }
+        return register;
+    }
+    
+    public GeneralRegister getGeneralRegisterByBinaryCode(String binaryCode){
+        GeneralRegister register = null;
+        for(int i = 0; i < this.generalRegisters.length; i++){
+            register = this.generalRegisters[i];
+            if(binaryCode.equals(register.getBinaryCode())) break;
+        }
+        return register;
+    }
+    
+    public Operation getOperationByBinaryCode(String binaryCode){
+        Operation op = null;
+        for(int i = 0; i < this.CPUOperations.length; i++){
+            op = this.CPUOperations[i];
+            if(binaryCode.equals(op.getBinaryCode())) break;
+        }
+        return op;
+    }
+    
+    public int loadProgramIntoMemory(String[] binaryInstructions){
+        int programSize = binaryInstructions.length;
+        int initIndex = this.getProgramInitialPosition(50, this.memory.getMemoryLength(), programSize);
+        int finalIndex = programSize + initIndex;
+        MemorySpace[] memoryArray = this.memory.getMemoryArray();
+        int x = 0;
+        for(int i = initIndex; i < finalIndex; i++){
+            memoryArray[i].setCurrentValue(binaryInstructions[x]);
+            x += 1;
+        }
+        for(int j = 0; j < 100; j++){
+            System.out.println(this.memory.getMemoryArray()[j].getMemorySpaceIndex() + ": " + this.memory.getMemoryArray()[j].getCurrentValue());
+        }
+        return initIndex;
+    }
+    
+    public int getProgramInitialPosition(int min, int max, int programSize){
+        Boolean invalidIndex = true;
+        int index = 0;
+        
+        while(invalidIndex){
+            index = (int) Math.floor(Math.random()*(max - min + 1)+ min);
+            if((programSize + index - 1) < this.memory.getMemoryLength()) invalidIndex = false;
+        }
+        
+        return index;
+    }
+    
+    private void initializeMemorySpaces(){
+        MemorySpace[] memoryArray;
+        int memoryLength = this.memory.getMemoryLength();
+        memoryArray = new MemorySpace[memoryLength];
+        for(int i = 0; i < memoryLength; i++){
+            memoryArray[i] = new MemorySpace(i);
+        }
+        this.memory.setMemoryArray(memoryArray);
+    }
+    
+    public void cleanMemorySpaces(){
+        int memoryLength = this.memory.getMemoryLength();
+        for(int i = 0; i < memoryLength; i++){
+            this.memory.getMemoryArray()[i].setCurrentValue("0");
+        }
+    }
+    
+    public void cleanCPURegisters(){
+        int size = this.CPURegisters.length;
+        for(int i = 0; i < size; i++){
+            this.CPURegisters[i].setCurrentValue(this.CPURegisters[i].getInitValue());
+        }
+    }
+    
+    public void executeInstruction(String BinaryInstruction){
+        
     }
     
 }
