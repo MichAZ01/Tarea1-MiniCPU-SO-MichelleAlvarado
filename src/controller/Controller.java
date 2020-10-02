@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import logic.BinaryConversor;
 import logic.CPU;
 import logic.Program;
+import logic.ProgramLoader;
 import logic.ProgramValidator;
 
 /**
@@ -129,8 +130,13 @@ public class Controller implements ActionListener {
         }
     }
     
-    public void createProgramStructure(File selectedFile){
-        
+    public void createProgramStructure(File selectedFile) throws IOException{
+        ProgramLoader programLoader = new ProgramLoader(this.extractFileInfo(selectedFile));
+        this.currentProgram = programLoader.getProgram();
+        int size = this.currentProgram.getProgramInstructions().length;
+        for(int i = 0; i < size; i++){
+            System.out.println(this.currentProgram.getProgramInstructions()[i] + " " + this.currentProgram.getBinaryInstructions()[i]);
+        }
     }
     
 }

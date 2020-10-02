@@ -14,9 +14,12 @@ import java.io.IOException;
 public class ProgramLoader {
     private Program program;
     
-    public ProgramLoader(){
+    public ProgramLoader(String data) throws IOException{
         this.program = new Program();
+        this.LoadProgramInstructions(data);
+        this.LoadBinaryInstructions();
     }
+
     
     public String createBinaryInstruction(String line) throws IOException{
         String binaryInstruction = "";
