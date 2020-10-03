@@ -7,6 +7,7 @@ package controller;
 
 import GUI.MiniPC;
 import GUI.MyCustomFilter;
+import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -123,6 +124,10 @@ public class Controller implements ActionListener {
         switch (result) {
             case JFileChooser.APPROVE_OPTION:
                 selectedFile = fileChooser.getSelectedFile();
+                CPU.getCPU().cleanMemorySpaces();
+                CPU.getCPU().cleanCPURegisters();
+                this.setCPURegistersGUI();
+                this.setGeneralRegistersGUI();
                 this.verifyFileFormat(selectedFile);
                 break;
             case JFileChooser.CANCEL_OPTION:
@@ -247,21 +252,15 @@ public class Controller implements ActionListener {
     }
     
     public void executeProgramInstruction() throws IOException{
-        System.out.println("-------------------------------------------------------");
-        System.out.println(this.currentProgramCurrentIndex);
-        System.out.println(this.linesExecuted);
-        System.out.println(CPU.getCPU().getMemory().getMemoryArray()[this.currentProgramCurrentIndex].getCurrentValue());
-        System.out.println(new ProgramConversor().binaryToASMInstruction(CPU.getCPU().getMemory().getMemoryArray()[this.currentProgramCurrentIndex].getCurrentValue()));
-        System.out.println("-------------------------------------------------------");
-        //primero llamo a ejecutar la instrucción
-        //luego actualizo los registros en pantalla
-        //después:
+        String binaryInstruction = CPU.getCPU().getMemory().getMemoryArray()[this.currentProgramCurrentIndex].getCurrentValue();
+        CPU.getCPU().executeInstruction(binaryInstruction, this.currentProgramCurrentIndex);
+        this.setCPURegistersGUI();
+        this.setGeneralRegistersGUI();
         this.currentProgramCurrentIndex = this.currentProgramCurrentIndex + 1;
         this.linesExecuted = this.linesExecuted + 1;
     }
     
     public void nextInstruction() throws IOException{
-        System.out.println("entra");
         if(this.linesExecuted < this.currentProgram.getProgramSize()){
             this.executeProgramInstruction();
         }
@@ -270,6 +269,25 @@ public class Controller implements ActionListener {
             CPU.getCPU().cleanCPURegisters();
             view.startButton.setEnabled(true);
             view.nextButton.setEnabled(false);
+        }
+    }
+    
+    public void setCPURegistersGUI() throws IOException{
+        view.pcValueLabel.setText(CPU.getCPU().getCPURegisterByName("PC").getCurrentValue());
+        view.acValueLabel.setText(CPU.getCPU().getCPURegisterByName("AC").getCurrentValue());
+        view.irValueLabel.setText(CPU.getCPU().getCPURegisterByName("IR").getCurrentValue());
+    }
+    
+    public void setGeneralRegistersGUI() throws IOException{
+        BinaryConversor binaryConversor = new BinaryConversor();
+        String[] labelRegisterNames = new String[]{"AX", "BX", "CX", "DX"};
+        Label[] labelRegisterObjects = new Label[]{view.axValueLabel, view.bxValueLabel, view.cxValueLabel, view.dxValueLabel};
+        
+        for(int i = 0; i < labelRegisterNames.length; i++){
+           String binaryCode = CPU.getCPU().getGeneralRegisterByName(labelRegisterNames[i]).getBinaryCode();
+            int index = binaryConversor.binaryToDecimal(binaryCode);
+            int value = new BinaryConversor().binaryToDecimal(CPU.getCPU().getMemory().getMemoryArray()[index].getCurrentValue());
+            labelRegisterObjects[i].setText(Integer.toString(value)); 
         }
     }
 }

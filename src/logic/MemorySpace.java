@@ -15,7 +15,7 @@ public class MemorySpace {
             
     public MemorySpace(int index){
         this.memorySpaceIndex = index;
-        this.currentValue = "0";
+        this.currentValue = "00000000";
     }
 
     public int getMemorySpaceIndex() {
@@ -31,6 +31,7 @@ public class MemorySpace {
     }
 
     public void setCurrentValue(String actualValue) {
+        if(actualValue == "0") actualValue = new BinaryConversor().fillWithZeros("", actualValue, 7);
         this.currentValue = actualValue;
     }
     

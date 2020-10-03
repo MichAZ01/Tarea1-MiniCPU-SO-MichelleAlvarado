@@ -184,9 +184,9 @@
                                   </Group>
                                   <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="irValueLabel" min="-2" max="-2" attributes="0"/>
-                                      <Component id="acValueLabel" min="-2" max="-2" attributes="0"/>
-                                      <Component id="pcValueLabel" min="-2" max="-2" attributes="0"/>
+                                      <Component id="irValueLabel" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="pcValueLabel" alignment="0" pref="306" max="32767" attributes="0"/>
+                                      <Component id="acValueLabel" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
@@ -198,14 +198,14 @@
                                   </Group>
                                   <EmptySpace min="-2" pref="2" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="dxValueLabel" min="-2" max="-2" attributes="0"/>
-                                      <Component id="cxValueLabel" min="-2" max="-2" attributes="0"/>
-                                      <Component id="bxValueLabel" min="-2" max="-2" attributes="0"/>
-                                      <Component id="axValueLabel" min="-2" max="-2" attributes="0"/>
+                                      <Component id="axValueLabel" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="bxValueLabel" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="cxValueLabel" max="32767" attributes="0"/>
+                                      <Component id="dxValueLabel" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
-                          <EmptySpace pref="304" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>

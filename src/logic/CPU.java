@@ -202,9 +202,6 @@ public class CPU {
             memoryArray[i].setCurrentValue(binaryInstructions[x]);
             x += 1;
         }
-        for(int j = 0; j < 100; j++){
-            System.out.println(this.memory.getMemoryArray()[j].getMemorySpaceIndex() + ": " + this.memory.getMemoryArray()[j].getCurrentValue());
-        }
         return initIndex;
     }
     
@@ -244,8 +241,83 @@ public class CPU {
         }
     }
     
-    public void executeInstruction(String BinaryInstruction){
-        
+    public void executeInstruction(String binaryInstruction, int currentIndex) throws IOException{
+        CPURegister pcRegister = this.getCPURegisterByName("PC");
+        pcRegister.setCurrentValue(Integer.toString(currentIndex));
+        String asmInstruction = new ProgramConversor().binaryToASMInstruction(binaryInstruction);
+        CPURegister irRegister = this.getCPURegisterByName("IR");
+        irRegister.setCurrentValue(asmInstruction);
+        String operation = asmInstruction.split(" ")[0];
+        String[] binaryOperationParts = binaryInstruction.split(" ");
+        switch(operation){
+            case "MOV":
+                //mover el número al registro indicado
+                this.executeMOVInstruction(binaryOperationParts[1], binaryOperationParts[2]);
+                break;
+            case "LOAD":
+                //cargar el valor del registro general en el registro AC
+                this.executeLOADInstruction(binaryOperationParts[1]);
+                break;
+            case "STORE":
+                //guardar lo que está en AC en el registro indicado
+                this.executeSTOREInstruction(binaryOperationParts[1]);
+                break;
+            case "SUB":
+                //restar lo que está en AC - valor de registro indicado
+                this.executeSUBInstruction(binaryOperationParts[1]);
+                break;
+            case "ADD":
+                //sumar lo que está en AC - valor de registro indicado
+                this.executeADDInstruction(binaryOperationParts[1]);
+                break;
+            default:
+                break;
+        }
     }
     
+    public void executeMOVInstruction(String binaryCode, String binaryNumber){
+        BinaryConversor binaryConversor = new BinaryConversor();
+        int memoryPosition = binaryConversor.binaryToDecimal(binaryCode);
+        this.memory.getMemoryArray()[memoryPosition].setCurrentValue(binaryNumber);
+    }
+    
+    public void executeLOADInstruction(String binaryCode){
+        BinaryConversor binaryConversor = new BinaryConversor();
+        int memoryPosition = binaryConversor.binaryToDecimal(binaryCode);
+        String value = this.memory.getMemoryArray()[memoryPosition].getCurrentValue();
+        String decimalValue = Integer.toString(binaryConversor.binaryToDecimal(value));
+        CPURegister acRegister = this.getCPURegisterByName("AC");
+        acRegister.setCurrentValue(decimalValue);
+    }
+    
+    public void executeSTOREInstruction(String binaryCode){
+        BinaryConversor binaryConversor = new BinaryConversor();
+        CPURegister acRegister = this.getCPURegisterByName("AC");
+        String acValue = acRegister.getCurrentValue();
+        int memoryPosition = binaryConversor.binaryToDecimal(binaryCode);
+        String acBinaryValue = binaryConversor.decimalToBinary(Integer.parseInt(acValue));
+        this.memory.getMemoryArray()[memoryPosition].setCurrentValue(acBinaryValue);
+    }
+    
+    public void executeSUBInstruction(String binaryCode){
+        BinaryConversor binaryConversor = new BinaryConversor();
+        CPURegister acRegister = this.getCPURegisterByName("AC");
+        int acValue = Integer.parseInt(acRegister.getCurrentValue());
+        int memoryPosition = binaryConversor.binaryToDecimal(binaryCode);
+        int registerValue = binaryConversor.binaryToDecimal(this.memory.getMemoryArray()[memoryPosition].getCurrentValue());
+        int sub = acValue - registerValue;
+        String result = Integer.toString(sub);
+        acRegister.setCurrentValue(result);
+    }
+    
+    public void executeADDInstruction(String binaryCode){
+        BinaryConversor binaryConversor = new BinaryConversor();
+        CPURegister acRegister = this.getCPURegisterByName("AC");
+        int acValue = Integer.parseInt(acRegister.getCurrentValue());
+        int memoryPosition = binaryConversor.binaryToDecimal(binaryCode);
+        int registerValue = binaryConversor.binaryToDecimal(this.memory.getMemoryArray()[memoryPosition].getCurrentValue());
+        int sum = acValue + registerValue;
+        String result = Integer.toString(sum);
+        acRegister.setCurrentValue(result);
+    }
 }
