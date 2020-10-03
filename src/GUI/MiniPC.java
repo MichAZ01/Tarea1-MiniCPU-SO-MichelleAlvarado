@@ -22,15 +22,6 @@ public class MiniPC extends javax.swing.JFrame {
     public MiniPC() {
         initComponents();
     }
-    
-    @Override
-    public Image getIconImage() {
-       Image retValue = Toolkit.getDefaultToolkit().
-             getImage(ClassLoader.getSystemResource("GUI/Images/pc_icon.png"));
-
-
-       return retValue;
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -68,7 +59,6 @@ public class MiniPC extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("MiniPC");
-        setIconImage(getIconImage());
 
         container.setBackground(new java.awt.Color(204, 204, 235));
 
