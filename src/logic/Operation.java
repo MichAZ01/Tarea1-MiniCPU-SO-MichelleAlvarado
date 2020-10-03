@@ -6,7 +6,7 @@
 package logic;
 
 /**
- *
+ * this class contains the attributes and accesor methods that allow simulating the operations that are allowed by the cpu
  * @author Michelle Alvarado
  */
 public class Operation {

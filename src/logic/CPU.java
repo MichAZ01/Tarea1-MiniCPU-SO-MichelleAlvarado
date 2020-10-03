@@ -8,7 +8,7 @@ package logic;
 import java.io.IOException;
 
 /**
- *
+ * a Singleton that works like a central processing unit
  * @author Michelle Alvarado
  */
 public class CPU {
@@ -26,6 +26,11 @@ public class CPU {
         this.initializeGeneralRegisters();
     }
     
+    /**
+     * Singleton method
+     * @return
+     * @throws IOException 
+     */
     public static CPU getCPU() throws IOException{
         if(myCPU == null){
             myCPU = new CPU();
@@ -33,6 +38,10 @@ public class CPU {
         return myCPU;
     }    
     
+    /**
+     * Calls a config reader object that reads a text file that contains the name of the general registers and his respective binary code
+     * @throws IOException 
+     */
     public void initializeGeneralRegisters() throws IOException{
         String[] generalRegistersLines = new ConfigReader().readFile(System.getProperty("user.dir") + "\\src\\logic\\ConfigFiles\\GeneralRegisters.txt");
         int size = generalRegistersLines.length;
@@ -47,6 +56,10 @@ public class CPU {
         }
     }
     
+    /**
+     * Calls a config reader object that reads a text file that contains the name of the cpu registers and his respective initial value
+     * @throws IOException 
+     */
     public void initializeCPURegisters() throws IOException{
         String[] CPURegistersLines = new ConfigReader().readFile(System.getProperty("user.dir") + "\\src\\logic\\ConfigFiles\\CPURegisters.txt");
         int size = CPURegistersLines.length;
@@ -61,6 +74,10 @@ public class CPU {
         }
     }
     
+    /**
+     * Calls a config reader object that reads a text file that contains the operations allowed by the CPU and his respective binary code
+     * @throws IOException 
+     */
     public void initializeCPUOperations() throws IOException{
         String[] CPUOperationsLines = new ConfigReader().readFile(System.getProperty("user.dir") + "\\src\\logic\\ConfigFiles\\Operations.txt");
         int size = CPUOperationsLines.length;
@@ -107,6 +124,10 @@ public class CPU {
         this.CPUOperations = CPUOperations;
     }
     
+    /**
+     * this method returns an array that contains the name of the all operations allowed by the cpu
+     * @return 
+     */
     public String[] getCPUOperationNames(){
         int size = this.CPUOperations.length;
         String[] operationNames = new String[size];
@@ -116,6 +137,10 @@ public class CPU {
         return operationNames;
     }
     
+    /**
+     * this method returns an array that contains the name of the all general register of the cpu
+     * @return 
+     */
     public String[] getGeneralRegisterNames(){
         int size = this.generalRegisters.length;
         String[] registerNames = new String[size];
@@ -125,6 +150,11 @@ public class CPU {
         return registerNames;
     }
     
+    /**
+     * this method return the respective binary code of an operation
+     * @param operation
+     * @return 
+     */
     public String getAnOperationBinary(String operation){
         String binaryCode = "";
         for(int i = 0; i < this.CPUOperations.length; i++){
@@ -136,6 +166,11 @@ public class CPU {
         return binaryCode;
     }
     
+    /**
+     * this method returns the respective binary code of and general register
+     * @param register
+     * @return 
+     */
     public String getAnGeneralRegisterBinary(String register){
         String binaryCode = "";
         for(int i = 0; i < this.generalRegisters.length; i++){
@@ -147,6 +182,11 @@ public class CPU {
         return binaryCode;
     }
     
+    /**
+     * this method returns the operation asociated by the paramater name
+     * @param opName
+     * @return 
+     */
     public Operation getOperationByName(String opName){
         Operation op = null;
         for(int i = 0; i < this.CPUOperations.length; i++){
@@ -156,6 +196,11 @@ public class CPU {
         return op;
     }
     
+    /**
+     * this methos returns the general register asociated by the parameter name
+     * @param registerName
+     * @return 
+     */
     public GeneralRegister getGeneralRegisterByName(String registerName){
         GeneralRegister register = null;
         for(int i = 0; i < this.generalRegisters.length; i++){
@@ -165,6 +210,11 @@ public class CPU {
         return register;
     }
     
+    /**
+     * this method returns the cpu register asociated by the parameter name
+     * @param registerName
+     * @return 
+     */
     public CPURegister getCPURegisterByName(String registerName){
         CPURegister register = null;
         for(int i = 0; i < this.CPURegisters.length; i++){
@@ -174,6 +224,11 @@ public class CPU {
         return register;
     }
     
+    /**
+     * this method returns the general register asociated to the binary code sends by parameter
+     * @param binaryCode
+     * @return 
+     */
     public GeneralRegister getGeneralRegisterByBinaryCode(String binaryCode){
         GeneralRegister register = null;
         for(int i = 0; i < this.generalRegisters.length; i++){
@@ -183,6 +238,11 @@ public class CPU {
         return register;
     }
     
+    /**
+     * this method returns the operation asociated to the binary code sends by parameter
+     * @param binaryCode
+     * @return 
+     */
     public Operation getOperationByBinaryCode(String binaryCode){
         Operation op = null;
         for(int i = 0; i < this.CPUOperations.length; i++){
@@ -192,6 +252,12 @@ public class CPU {
         return op;
     }
     
+    /**
+     * takes each program binary instruction and stores them into the memory from a random position (that can be from 50 to size of the memory - 1
+     * if the program fits within the amount of spaces it has)
+     * @param binaryInstructions: the set of program instructions in 16 bits binary format 
+     * @return 
+     */
     public int loadProgramIntoMemory(String[] binaryInstructions){
         int programSize = binaryInstructions.length;
         int initIndex = this.getProgramInitialPosition(50, this.memory.getMemoryLength(), programSize);
@@ -205,6 +271,13 @@ public class CPU {
         return initIndex;
     }
     
+    /**
+     * 
+     * @param min: the minimum position of the memory where a program can be store
+     * @param max: the amount of memory spaces that the memory has
+     * @param programSize: the amount of instructions that the current program has
+     * @return 
+     */
     public int getProgramInitialPosition(int min, int max, int programSize){
         Boolean invalidIndex = true;
         int index = 0;
@@ -217,6 +290,9 @@ public class CPU {
         return index;
     }
     
+    /**
+     * creates all the memory spaces that the memory can have
+     */
     private void initializeMemorySpaces(){
         MemorySpace[] memoryArray;
         int memoryLength = this.memory.getMemoryLength();
@@ -227,6 +303,9 @@ public class CPU {
         this.memory.setMemoryArray(memoryArray);
     }
     
+    /**
+     * restarts the default value of the all memory spaces
+     */
     public void cleanMemorySpaces(){
         int memoryLength = this.memory.getMemoryLength();
         for(int i = 0; i < memoryLength; i++){
@@ -234,6 +313,9 @@ public class CPU {
         }
     }
     
+    /**
+     * restarts the default value of the all cpu registers
+     */
     public void cleanCPURegisters(){
         int size = this.CPURegisters.length;
         for(int i = 0; i < size; i++){
@@ -241,6 +323,14 @@ public class CPU {
         }
     }
     
+    /**
+     * in this method the PC register will point at the current instruction that is being executed.
+     * Also the IR register contains the ASM instruction equivalent to the binary instruction.
+     * Is taken the operation part of the instruction and it is evaluated what operation should be performed
+     * @param binaryInstruction: the current instruction being executed
+     * @param currentIndex
+     * @throws IOException 
+     */
     public void executeInstruction(String binaryInstruction, int currentIndex) throws IOException{
         CPURegister pcRegister = this.getCPURegisterByName("PC");
         pcRegister.setCurrentValue(Integer.toString(currentIndex));
@@ -251,23 +341,23 @@ public class CPU {
         String[] binaryOperationParts = binaryInstruction.split(" ");
         switch(operation){
             case "MOV":
-                //mover el número al registro indicado
+                //move the number part to the indicated register
                 this.executeMOVInstruction(binaryOperationParts[1], binaryOperationParts[2]);
                 break;
             case "LOAD":
-                //cargar el valor del registro general en el registro AC
+                //load the value of the indicated register into AC register
                 this.executeLOADInstruction(binaryOperationParts[1]);
                 break;
             case "STORE":
-                //guardar lo que está en AC en el registro indicado
+                //store the value of the AC register into the indicated register
                 this.executeSTOREInstruction(binaryOperationParts[1]);
                 break;
             case "SUB":
-                //restar lo que está en AC - valor de registro indicado
+                //substract AC - value of the indicated register and store them into the AC register
                 this.executeSUBInstruction(binaryOperationParts[1]);
                 break;
             case "ADD":
-                //sumar lo que está en AC - valor de registro indicado
+                //sum AC - value of the indicated register and store them into the AC register
                 this.executeADDInstruction(binaryOperationParts[1]);
                 break;
             default:
@@ -275,12 +365,21 @@ public class CPU {
         }
     }
     
+    /**
+     * 
+     * @param binaryCode: destination register
+     * @param binaryNumber: the number that will be moved
+     */
     public void executeMOVInstruction(String binaryCode, String binaryNumber){
         BinaryConversor binaryConversor = new BinaryConversor();
         int memoryPosition = binaryConversor.binaryToDecimal(binaryCode);
         this.memory.getMemoryArray()[memoryPosition].setCurrentValue(binaryNumber);
     }
     
+    /**
+     * 
+     * @param binaryCode: the register that contains the value that will be load into the AC register 
+     */
     public void executeLOADInstruction(String binaryCode){
         BinaryConversor binaryConversor = new BinaryConversor();
         int memoryPosition = binaryConversor.binaryToDecimal(binaryCode);
@@ -290,6 +389,10 @@ public class CPU {
         acRegister.setCurrentValue(decimalValue);
     }
     
+    /**
+     * 
+     * @param binaryCode: the register that will be contains the value that currently are stored into the AC register
+     */
     public void executeSTOREInstruction(String binaryCode){
         BinaryConversor binaryConversor = new BinaryConversor();
         CPURegister acRegister = this.getCPURegisterByName("AC");
@@ -299,6 +402,10 @@ public class CPU {
         this.memory.getMemoryArray()[memoryPosition].setCurrentValue(acBinaryValue);
     }
     
+    /**
+     * 
+     * @param binaryCode: the register that contains the value that will be substracted to the value into the AC register
+     */
     public void executeSUBInstruction(String binaryCode){
         BinaryConversor binaryConversor = new BinaryConversor();
         CPURegister acRegister = this.getCPURegisterByName("AC");
@@ -310,6 +417,10 @@ public class CPU {
         acRegister.setCurrentValue(result);
     }
     
+    /**
+     * 
+     * @param binaryCode: the register that contains the value that will be added to the value into the AC register
+     */
     public void executeADDInstruction(String binaryCode){
         BinaryConversor binaryConversor = new BinaryConversor();
         CPURegister acRegister = this.getCPURegisterByName("AC");

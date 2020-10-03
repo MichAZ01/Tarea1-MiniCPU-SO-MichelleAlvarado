@@ -8,7 +8,7 @@ package logic;
 import java.io.IOException;
 
 /**
- *
+ * this class contains methods that allow converting binary instructions to assembly instructions and the opposite
  * @author Michelle Alvarado
  */
 public class ProgramConversor {
@@ -16,6 +16,12 @@ public class ProgramConversor {
         
     }
     
+    /**
+     * 
+     * @param line: the binary instruction that will be converted to an assembly instruction
+     * @return
+     * @throws IOException 
+     */
     public String createBinaryInstruction(String line) throws IOException{
         String binaryInstruction = "";
         String operation = line.split(" ")[0];
@@ -35,6 +41,14 @@ public class ProgramConversor {
         return binaryInstruction;
     }
     
+    /**
+     * take the three parts of a binary instruction and unites them
+     * @param operation
+     * @param register
+     * @param number
+     * @return
+     * @throws IOException 
+     */
     public String ConstructBinaryInstruction(String operation, String register, int number) throws IOException{
         String binaryOperation = CPU.getCPU().getAnOperationBinary(operation);
         String binaryRegister = CPU.getCPU().getAnGeneralRegisterBinary(register);
@@ -44,6 +58,12 @@ public class ProgramConversor {
         return binaryInstruction;
     }
     
+    /**
+     * takes the binary parts and convert each one in an assembly equivalent part
+     * @param binaryCodeParts
+     * @return
+     * @throws IOException 
+     */
     public String decodeThreePartsInstruction(String[] binaryCodeParts) throws IOException{
         String assemblyInstruction = "";
         String operation = CPU.getCPU().getOperationByBinaryCode(binaryCodeParts[0]).getOperationName();
@@ -53,6 +73,12 @@ public class ProgramConversor {
         return assemblyInstruction;
     }
     
+    /**
+     * takes the binary parts and convert each one in an assembly equivalent part
+     * @param binaryCodeParts
+     * @return
+     * @throws IOException 
+     */
     public String decodeTwoPartsInstruction(String[] binaryCodeParts) throws IOException{
         String assemblyInstruction = "";
         String operation = CPU.getCPU().getOperationByBinaryCode(binaryCodeParts[0]).getOperationName();
@@ -61,6 +87,14 @@ public class ProgramConversor {
         return assemblyInstruction;
     }
     
+    /**
+     * depends of the operation that binary instruction has it will be a three part or a two part assembly instruction. Example:
+     * MOV, AX 2 has three parts (operation, destination register and a integer number that will be moved to the indicated register
+     * LOAD BX has two parts (the operation ans the register that contains the value that will be manipulated)
+     * @param binaryCode
+     * @return
+     * @throws IOException 
+     */
     public String binaryToASMInstruction(String binaryCode) throws IOException{
         String asmInstruction = "";
         String[] binaryCodeParts = binaryCode.split(" ");

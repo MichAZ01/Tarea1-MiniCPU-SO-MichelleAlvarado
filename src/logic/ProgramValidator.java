@@ -17,6 +17,12 @@ public class ProgramValidator {
         
     }
     
+    /**
+     * validate (depend of the operation) if a instruction is correct or not
+     * @param line
+     * @return
+     * @throws IOException 
+     */
     public Boolean validateSingleLine(String line) throws IOException{
         Boolean correctFormat = true;
         String[] allowedOperations = CPU.getCPU().getCPUOperationNames();
@@ -46,6 +52,12 @@ public class ProgramValidator {
         return correctFormat;
     }
     
+    /**
+     * the loop for validate each program instruction
+     * @param data
+     * @return
+     * @throws IOException 
+     */
     public Boolean validateLineFormat(String data) throws IOException{
         Boolean correctFormat = true;
         String lines[] = data.split("\\r?\\n");
@@ -59,7 +71,12 @@ public class ProgramValidator {
         return correctFormat;
     }
      
-    
+    /**
+     * validates that the .asm selected file is not empty and has the correct format
+     * @param data
+     * @return
+     * @throws IOException 
+     */
     public Boolean validateSelectedFile(String data) throws IOException{
         Boolean correctFile = true;
         Boolean fileIsEmpty = data.isEmpty();
@@ -70,6 +87,13 @@ public class ProgramValidator {
         return correctFile;
     }
     
+    /**
+     * validate if a string exists in an array. Used to verify for example if the operation part exists in the array of the operations
+     * allows by the cpu
+     * @param string
+     * @param array
+     * @return 
+     */
     public boolean StringExistsInArray(String string, String[] array){
         Boolean exists = false;
         int size = array.length;
@@ -82,6 +106,13 @@ public class ProgramValidator {
         return exists;
     }
     
+    /**
+     * validate if a MOV operation has three correct parts: operation (MOV), destination register (AX for example) and a integer number
+     * that will be moved into a indicated register
+     * @param line
+     * @param allowedRegisters
+     * @return 
+     */
     public boolean validateMOVOperation(String line, String[] allowedRegisters){
         Boolean correctFormat = true;
         String[] lineParts = line.split(", ");
@@ -99,9 +130,14 @@ public class ProgramValidator {
         return correctFormat;
     }
     
-    private static boolean isNumeric(String cadena){
+    /**
+     * validate if an string might be cast to an integer number
+     * @param str
+     * @return 
+     */
+    private static boolean isNumeric(String str){
 	try {
-		Integer.parseInt(cadena);
+		Integer.parseInt(str);
 		return true;
 	} catch (NumberFormatException nfe){
 		return false;

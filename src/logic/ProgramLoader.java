@@ -8,7 +8,8 @@ package logic;
 import java.io.IOException;
 
 /**
- *
+ * this class contains the methods that allow to take all the program instructions and store them, also in this class is possible to store the binary
+ * instructions asociated to an each assembly instruction of the program
  * @author Michelle Alvarado
  */
 public class ProgramLoader {
@@ -21,12 +22,20 @@ public class ProgramLoader {
         this.program.setProgramSize(this.program.getProgramInstructions().length);
     }
 
-    
+    /**
+     * takes the string that contains all the program ans separate them by the backslash 
+     * @param data
+     * @throws IOException 
+     */
     public void LoadProgramInstructions(String data) throws IOException{
         String lines[] = data.split("\\r?\\n");
         this.program.setProgramInstructions(lines);
     }
     
+    /**
+     * convert each assembly instruction to binary instruction and store them
+     * @throws IOException 
+     */
     public void LoadBinaryInstructions() throws IOException{
         String[] instructions = this.program.getProgramInstructions();
         int size = instructions.length;

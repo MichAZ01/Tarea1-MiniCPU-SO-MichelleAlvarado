@@ -6,7 +6,7 @@
 package logic;
 
 /**
- *
+ * this class contains the attributes and accessor methods that allow to simulate a cpu register like PC, AC and IR
  * @author Michelle Alvarado
  */
 public class CPURegister {

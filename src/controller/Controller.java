@@ -27,7 +27,7 @@ import logic.ProgramLoader;
 import logic.ProgramValidator;
 
 /**
- *
+ * This class works like an intermediary between the view and the all logic of program
  * @author Michelle Alvarado
  */
 public class Controller implements ActionListener {
@@ -39,6 +39,10 @@ public class Controller implements ActionListener {
     public Controller(){
     }
     
+    /**
+     * Manages the different cases for an event like open a file, start the execution of a program or execute the next instruction of a program
+     * @param ae: an event produced by an object in the view (button in this case)
+     */
     @Override
     public void actionPerformed(ActionEvent ae) {
         switch(ae.getActionCommand()){
@@ -114,6 +118,12 @@ public class Controller implements ActionListener {
         });
     }
     
+    /**
+     * This method is executed by the open file button, is responsible of create a fileChooser that only accepts .asm files and if its one is choosed is
+     * stored in the 'selectedFile' attribute for later use.
+     * @param view
+     * @throws IOException 
+     */
     public void OpenFolderButtonActionPerformed(javax.swing.JFrame view) throws IOException {                                                 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setAcceptAllFileFilterUsed(false);
@@ -137,6 +147,12 @@ public class Controller implements ActionListener {
         }
     }   
     
+    /**
+     * return an string that contains the all lines of the file concatenated
+     * @param file: an assembly file
+     * @return
+     * @throws IOException 
+     */
     public String extractFileInfo(File file) throws IOException {
         FileInputStream tokensFile = new FileInputStream(file);
         byte[] dataBytes = new byte[(int) file.length()];
@@ -145,6 +161,12 @@ public class Controller implements ActionListener {
         return data;
     }
     
+    /**
+     * Calls a program validator that verify if the structure of the assembly instructions is correct. If its is: calls the methods that initialize
+     * the variables in the view. If its not: displays an error message.
+     * @param selectedFile: the current .asm file that was opened
+     * @throws IOException 
+     */
     public void verifyFileFormat(File selectedFile) throws IOException{
         ProgramValidator programValidator;
         programValidator = new ProgramValidator();
@@ -162,11 +184,22 @@ public class Controller implements ActionListener {
         }
     }
     
+    /**
+     * Calls a object 'ProgramLoader' that loads the current program in an array that contains one instruction for each line in the original file
+     * @param selectedFile: : the current .asm file that was opened
+     * @throws IOException 
+     */
     public void createProgramStructure(File selectedFile) throws IOException{
         ProgramLoader programLoader = new ProgramLoader(this.extractFileInfo(selectedFile));
         this.currentProgram = programLoader.getProgram();
     }
     
+    /**
+     * sets the values of the GUI table to displays the program and his equivalent binary code
+     * @param columnLength
+     * @param rowsTotalSize
+     * @return 
+     */
     public Object[][] InitializeCodeTableModel(int columnLength, int rowsTotalSize){
         int programSize = this.currentProgram.getProgramSize();
         int rows = this.currentProgram.getProgramSize();
@@ -188,6 +221,10 @@ public class Controller implements ActionListener {
         return data;
     }
     
+    /**
+     * displays the data in the view's table
+     * @param data 
+     */
     public void setTableModel(Object[][] data){
         this.view.codeTable.setModel(new javax.swing.table.DefaultTableModel(
             data,
@@ -205,6 +242,11 @@ public class Controller implements ActionListener {
         });
     }
     
+    /**
+     * restarts the view's table
+     * @param columns
+     * @param rows 
+     */
     public void CleanCodeTableModel(int columns, int rows){
         Object[][] data = new Object[rows][columns];
         
@@ -216,6 +258,13 @@ public class Controller implements ActionListener {
         setTableModel(data);
     }
     
+    /**
+     * sets the values of the GUI table to displays the program, his equivalent binary code and and the memory location where each instruction is located
+     * @param columnLength
+     * @param rowsTotalSize
+     * @param index
+     * @return 
+     */
     public Object[][] InitializeCodeTableModelWithMemoryPositions(int columnLength, int rowsTotalSize, int index){
         int programSize = this.currentProgram.getProgramSize();
         int rows = this.currentProgram.getProgramSize();
@@ -239,6 +288,11 @@ public class Controller implements ActionListener {
         return data;
     }
     
+    /**
+     * Cleans the memory and the CPU registers to make sure the program runs properly, initialize the 'TableModel' to displays the program instructions
+     * and executes the first instruction of the program. Disabled the start button and enabled the next button to executes the next program instruction
+     * @throws IOException 
+     */
     public void startProgramExecution() throws IOException{
         CPU.getCPU().cleanMemorySpaces();
         CPU.getCPU().cleanCPURegisters();
@@ -251,6 +305,10 @@ public class Controller implements ActionListener {
         view.nextButton.setEnabled(true);
     }
     
+    /**
+     * Calls the respective method in the CPU to execute the current instruction of the program
+     * @throws IOException 
+     */
     public void executeProgramInstruction() throws IOException{
         String binaryInstruction = CPU.getCPU().getMemory().getMemoryArray()[this.currentProgramCurrentIndex].getCurrentValue();
         CPU.getCPU().executeInstruction(binaryInstruction, this.currentProgramCurrentIndex);
@@ -260,6 +318,11 @@ public class Controller implements ActionListener {
         this.linesExecuted = this.linesExecuted + 1;
     }
     
+    /**
+     * This method is executed by 'the next button'. Validates if exists a next instruction to execute. If its not: disables the next button and
+     * enabled the start button to allowed restart the program execution
+     * @throws IOException 
+     */
     public void nextInstruction() throws IOException{
         if(this.linesExecuted < this.currentProgram.getProgramSize()){
             this.executeProgramInstruction();
@@ -272,12 +335,20 @@ public class Controller implements ActionListener {
         }
     }
     
+    /**
+     * loads the current value of the CPU registers into the GUI respective labels.
+     * @throws IOException 
+     */
     public void setCPURegistersGUI() throws IOException{
         view.pcValueLabel.setText(CPU.getCPU().getCPURegisterByName("PC").getCurrentValue());
         view.acValueLabel.setText(CPU.getCPU().getCPURegisterByName("AC").getCurrentValue());
         view.irValueLabel.setText(CPU.getCPU().getCPURegisterByName("IR").getCurrentValue());
     }
     
+    /**
+     * loads the current value of the general registers (that are ubicated in the memory) into the GUI respective labels
+     * @throws IOException 
+     */
     public void setGeneralRegistersGUI() throws IOException{
         BinaryConversor binaryConversor = new BinaryConversor();
         String[] labelRegisterNames = new String[]{"AX", "BX", "CX", "DX"};

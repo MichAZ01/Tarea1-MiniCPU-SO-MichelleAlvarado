@@ -6,7 +6,7 @@
 package logic;
 
 /**
- *
+ * this class contains the attributes and accesor methods that allow to simulate the memory spaces of a cpu memory
  * @author Michelle Alvarado
  */
 public class MemorySpace {

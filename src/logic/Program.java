@@ -6,7 +6,7 @@
 package logic;
 
 /**
- *
+ * this class contains the attributes and accesor methods that allowed manage the instructions of a program and his respective binary instructions
  * @author Michelle Alvarado
  */
 public class Program {

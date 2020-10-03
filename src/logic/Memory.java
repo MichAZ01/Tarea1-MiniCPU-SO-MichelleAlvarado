@@ -6,7 +6,8 @@
 package logic;
 
 /**
- *
+ * this class contains the attributes and the accesor methods that allow to simulate cpu memory that contains one hundred memory spaces to store
+ * programs and general registers values.
  * @author Michelle Alvarado
  */
 public class Memory {

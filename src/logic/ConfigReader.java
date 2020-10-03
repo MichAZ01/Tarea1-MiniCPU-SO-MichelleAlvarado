@@ -11,7 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- *
+ * that class contains the methods that allows to read and get the file length of the configuration files
  * @author Michelle Alvarado
  */
 public class ConfigReader {
@@ -20,6 +20,13 @@ public class ConfigReader {
         
     }
     
+    /**
+     * takes a path and returns an array that contains all the lines of the respective file
+     * @param selectedFile
+     * @return lines: all the lines of the configuration file
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public static String[] readFile(String selectedFile) throws FileNotFoundException, IOException {
         String cadena;
         String[] lines;
@@ -39,6 +46,13 @@ public class ConfigReader {
         return lines;
     }
     
+    /**
+     * takes a file and returns the amount of the lines that its file contains
+     * @param selectedFile
+     * @return size
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public static int getFileLength(String selectedFile) throws FileNotFoundException, IOException {
         String cadena;
         int size = 0;

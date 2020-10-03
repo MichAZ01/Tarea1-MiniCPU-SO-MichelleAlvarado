@@ -6,7 +6,7 @@
 package logic;
 
 /**
- *
+ * this class contains the attributes and the accesor methods that allow to simulate the general registers of the cpu like AX, BX, CX, DX
  * @author Michelle Alvarado
  */
 public class GeneralRegister {

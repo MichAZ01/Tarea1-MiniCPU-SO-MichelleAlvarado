@@ -8,7 +8,7 @@ package Application;
 import controller.Controller;
 
 /**
- *
+ * initialize the GUI through a controller
  * @author Michelle Alvarado
  */
 public class AplMiniPC {
